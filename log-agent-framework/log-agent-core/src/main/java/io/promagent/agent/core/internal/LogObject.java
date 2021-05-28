@@ -8,7 +8,6 @@ import io.promagent.agent.core.config.LogConfig;
 import io.promagent.agent.core.config.LogConstants;
 import io.promagent.agent.core.config.TypeConstants;
 import io.promagent.agent.core.utils.LogObjectUtils;
-import io.promagent.agent.core.utils.MdcUtils;
 import io.promagent.agent.core.utils.StringUtils;
 import io.promagent.agent.core.utils.ThrowableUtils;
 import lombok.Getter;
@@ -79,11 +78,12 @@ public class LogObject {
                         .fluentPut(LogConstants.basic_sn, ++sn)
                         .fluentPut(LogConstants.basic_ip, LogConfig.IP)
                         .fluentPut(LogConstants.basic_grade, grade))
-                .fluentPut(LogConstants.mdc, new JSONObject()
-                        .fluentPut(LogConstants.mdc_appEvn, LogConfig.appEvn)
-                        .fluentPut(LogConstants.mdc_appName, LogConfig.appName)
-                        .fluentPut(LogConstants.mdc_type, type)
-                        .fluentPut(LogConstants.mdc_logId, MdcUtils.getLogId()))
+                        .fluentPut(LogConstants.basic_type, type)
+//                .fluentPut(LogConstants.mdc, new JSONObject()
+//                        .fluentPut(LogConstants.mdc_appEvn, LogConfig.appEvn)
+//                        .fluentPut(LogConstants.mdc_appName, LogConfig.appName)
+//                        .fluentPut(LogConstants.mdc_type, type)
+//                        .fluentPut(LogConstants.mdc_logId, MdcUtils.getLogId()))
                 .fluentPut(LogConstants.request, request)
                 .fluentPut(LogConstants.method, method)
                 .toString();

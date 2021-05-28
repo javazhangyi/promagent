@@ -95,12 +95,12 @@ public class AgentBootstrap {
         }
 
         System.setProperty("agent.ip", InetAddress.getLocalHost().getHostAddress());
-        System.setProperty("agent.appEvn", this.appEvn);
+//        System.setProperty("agent.appEvn", this.appEvn);
 
         System.setProperty("agent.debug", String.valueOf(agent.isDebug()));
         System.setProperty("agent.retMaxLength", String.valueOf(agent.getRetMaxLength()));
 
-        System.setProperty("agent.appName", agent.getAppName());
+//        System.setProperty("agent.appName", agent.getAppName());
         System.setProperty("agent.traceId", agent.getTraceId());
         System.setProperty("agent.mdcLogId", agent.getMdcLogId());
 

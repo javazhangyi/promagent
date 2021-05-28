@@ -47,7 +47,7 @@ public class AgentConfig {
         private boolean debug = false;
         private int retMaxLength = 20480;
 
-        private String mdcLogId = "access_id";
+        private String mdcLogId = "mdcLogId";
         private String traceId = "X-REQUEST-ID";
 
         private String callClass = "io.promagent.agent.core.Logger";

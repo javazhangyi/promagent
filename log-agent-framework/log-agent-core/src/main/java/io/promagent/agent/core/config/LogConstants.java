@@ -19,12 +19,14 @@ public interface LogConstants {
     String basic_sn = "sn";
     String basic_ip = "ip";
     String basic_grade = "grade";
+    String basic_type = "type";
 
-    String mdc = "mdc";
+
+//    String mdc = "mdc";
     String mdc_logId = System.getProperty("agent.mdcLogId");
-    String mdc_appName = "appName";
-    String mdc_appEvn = "appEvn";
-    String mdc_type = "type";
+//    String mdc_appName = "appName";
+//    String mdc_appEvn = "appEvn";
+//    String mdc_type = "type";
 
     String null_string = "NULL";
     String skip = "skip";

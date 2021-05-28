@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <contextName>logback</contextName>
+    <springProperty scope="context" name="appName" source="server.servlet.application-display-name"/>
+    <springProperty scope="context" name="appEvn" source="promagent.agent.appEvn"/>
+<!--    <springProperty scope="context" name="serverPort" source="server.port"/>-->
+<!--    <springProperty scope="context" name="logstash.host" source="log.logstash.host"/>-->
+<!--    <springProperty scope="context" name="logstash.port" source="log.logstash.port"/>-->
+
+<!--    <springProperty scope="context" name="logPath" source="logging.file.path"/>-->
+    <!--输出到控制台-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>{"date":"%date","level":"%level","thread":"%thread","appName":"${appName}","appEvn":"${appEvn}","access_id":"%mdc{access_id}","msg":%msg}%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <!--按天生成日志-->
+<!--    <appender name="logFile" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+<!--        <Prudent>true</Prudent>-->
+<!--        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+<!--            <FileNamePattern>${logPath}/newBuilder-%d{yyyy-MM-dd}.log</FileNamePattern>-->
+<!--            <maxHistory>2</maxHistory>-->
+<!--        </rollingPolicy>-->
+<!--        <layout class="ch.qos.logback.classic.PatternLayout">-->
+<!--            <pattern>{-->
+<!--                date:%date,-->
+<!--                level:%-5level,-->
+<!--                thread:%thread-->
+<!--                %mdc{appName},-->
+<!--                %mdc{appEvn},-->
+<!--                %mdc{access_id},-->
+<!--                %msg}-->
+<!--                %n</pattern>-->
+<!--        </layout>-->
+<!--    </appender>-->
+
+<!--    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">-->
+<!--        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+<!--            <level>INFO</level>-->
+<!--        </filter>-->
+<!--        <destination>${logstash.host}:${logstash.port}</destination>-->
+<!--        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">-->
+<!--            <customFields>{"tags":["common-base-logback"]}</customFields>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+
+    <root level="INFO">
+        <appender-ref ref="console"/>
+<!--        <appender-ref ref="logFile"/>-->
+<!--        <appender-ref ref="LOGSTASH"/>-->
+    </root>
+
+</configuration>

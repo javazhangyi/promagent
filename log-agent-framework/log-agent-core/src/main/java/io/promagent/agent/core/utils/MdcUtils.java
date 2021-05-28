@@ -12,8 +12,8 @@ public class MdcUtils {
     public static void setLogId(String val) {
         val = StringUtils.isEmpty(val) ? UUID.randomUUID().toString() : val;
         MDC.put(LogConstants.mdc_logId, val);
-        MDC.put(LogConstants.mdc_appName, LogConfig.appName);
-        MDC.put(LogConstants.mdc_appEvn, LogConfig.appEvn);
+//        MDC.put(LogConstants.mdc_appName, LogConfig.appName);
+//        MDC.put(LogConstants.mdc_appEvn, LogConfig.appEvn);
     }
 
     public static String getLogId() {
