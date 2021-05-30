@@ -22,8 +22,8 @@ import java.net.UnknownHostException;
 @Slf4j
 public class AgentBootstrap {
 
-    @Value("${promagent.agent.appEvn}")
-    private String appEvn;
+//    @Value("${promagent.agent.appEvn}")
+//    private String appEvn;
 
     private AgentConfig agentConfig = new AgentConfig();
 
@@ -88,13 +88,13 @@ public class AgentBootstrap {
 
     private void initSystemProperty() throws UnknownHostException {
 
-        if (StringUtils.isEmpty(this.appEvn) || this.appEvn.startsWith("$")) {
-            this.appEvn = agent.getAppEvn();
-        } else {
-            agent.setAppEvn(this.appEvn);
-        }
+//        if (StringUtils.isEmpty(this.appEvn) || this.appEvn.startsWith("$")) {
+//            this.appEvn = agent.getAppEvn();
+//        } else {
+//            agent.setAppEvn(this.appEvn);
+//        }
 
-        System.setProperty("agent.ip", InetAddress.getLocalHost().getHostAddress());
+//        System.setProperty("agent.ip", InetAddress.getLocalHost().getHostAddress());
 //        System.setProperty("agent.appEvn", this.appEvn);
 
         System.setProperty("agent.debug", String.valueOf(agent.isDebug()));

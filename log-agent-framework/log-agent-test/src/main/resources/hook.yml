@@ -1,8 +1,10 @@
 promagent:
   agent:
-    appName: testAgent
+    appName: logAgentTest
+    traceId: logger_id
+    mdcLogId: mdcLogId
     headers: !!seq
-      - "none"
+      - "all"
   fastHooks:
      controllerPackage: io.promagent.agent.test.controller
   load:

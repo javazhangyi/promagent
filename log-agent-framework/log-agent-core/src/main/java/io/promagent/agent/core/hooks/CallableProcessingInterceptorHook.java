@@ -22,9 +22,9 @@ public class CallableProcessingInterceptorHook {
     @Before(method = {"beforeConcurrentHandling"})
     public void before(NativeWebRequest request, Callable<Object> task) {
         try {
-            String logId = (String) request.getAttribute(LogConstants.mdc_logId, RequestAttributes.SCOPE_REQUEST);
+            String logId = (String) request.getAttribute(LogConstants.mdcLogId, RequestAttributes.SCOPE_REQUEST);
             if (StringUtils.isEmpty(logId)) {
-                request.setAttribute(LogConstants.mdc_logId, MdcUtils.getLogId(), RequestAttributes.SCOPE_REQUEST);
+                request.setAttribute(LogConstants.mdcLogId, MdcUtils.getLogId(), RequestAttributes.SCOPE_REQUEST);
             }
         } catch (Throwable e) {
             Logger.error(e);
@@ -34,10 +34,10 @@ public class CallableProcessingInterceptorHook {
     @After(method = {"postProcess"})
     public void after(NativeWebRequest request, Callable<Object> task, Object concurrentResult, @Thrown Throwable throwable) {
         try {
-            String logId = (String) request.getAttribute(LogConstants.mdc_logId, RequestAttributes.SCOPE_REQUEST);
+            String logId = (String) request.getAttribute(LogConstants.mdcLogId, RequestAttributes.SCOPE_REQUEST);
             if (!StringUtils.isEmpty(logId)) {
                 Logger.syncInfo(throwable, logId, concurrentResult);
-                request.removeAttribute(LogConstants.mdc_logId, RequestAttributes.SCOPE_REQUEST);
+                request.removeAttribute(LogConstants.mdcLogId, RequestAttributes.SCOPE_REQUEST);
             }
         } catch (Throwable e) {
             Logger.error(e);

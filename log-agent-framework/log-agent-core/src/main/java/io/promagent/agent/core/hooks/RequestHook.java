@@ -1,6 +1,7 @@
 package io.promagent.agent.core.hooks;
 
 
+import com.alibaba.fastjson.JSONObject;
 import io.promagent.agent.core.Logger;
 import io.promagent.agent.core.config.GradeConstants;
 import io.promagent.agent.core.config.LogConfig;
@@ -59,12 +60,12 @@ public class RequestHook {
 
                 Map<String, String> headers = RequestUtils.getHeaders(httpServletRequest);
 
-                Map<String, Object> addRequestMap = new HashMap<>();
+                Map<String, String> addRequestMap = new HashMap<>();
                 if (!CollectionUtils.isEmpty(headers)) {
-                    addRequestMap.put(LogConstants.reg_header, headers);
+                    addRequestMap.put(LogConstants.reqHeaders, JSONObject.toJSONString(headers));
                 }
 
-                addRequestMap.put(LogConstants.reg_url, httpServletRequest.getRequestURI());
+                addRequestMap.put(LogConstants.reqUrl, httpServletRequest.getRequestURI());
                 LogObjectProxy.addRequest(addRequestMap);
             }
         } catch (Throwable e) {
@@ -82,12 +83,12 @@ public class RequestHook {
                 HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
                 Map<String, String> params = RequestUtils.getParams(httpServletRequest);
-                Map<String, Object> addRequestMap = new HashMap<>();
+                Map<String, String> addRequestMap = new HashMap<>();
 
                 if (!CollectionUtils.isEmpty(params)) {
-                    addRequestMap.put(LogConstants.reg_params, params);
+                    addRequestMap.put(LogConstants.reqParams, JSONObject.toJSONString(params));
                 }
-                addRequestMap.put(LogConstants.reg_status, httpServletResponse.getStatus());
+                addRequestMap.put(LogConstants.reqStatus, String.valueOf(httpServletResponse.getStatus()));
                 LogObjectProxy.addRequest(addRequestMap);
 
                 String grade = GradeConstants.DEFAULT;

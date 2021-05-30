@@ -1,55 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <contextName>logback</contextName>
-    <springProperty scope="context" name="appName" source="server.servlet.application-display-name"/>
-    <springProperty scope="context" name="appEvn" source="promagent.agent.appEvn"/>
-<!--    <springProperty scope="context" name="serverPort" source="server.port"/>-->
-<!--    <springProperty scope="context" name="logstash.host" source="log.logstash.host"/>-->
-<!--    <springProperty scope="context" name="logstash.port" source="log.logstash.port"/>-->
+    <springProperty scope="context" name="app" source="spring.application.name"/>
+    <springProperty scope="context" name="evn" source="spring.profiles.active"/>
 
-<!--    <springProperty scope="context" name="logPath" source="logging.file.path"/>-->
-    <!--输出到控制台-->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>{"date":"%date","level":"%level","thread":"%thread","appName":"${appName}","appEvn":"${appEvn}","access_id":"%mdc{access_id}","msg":%msg}%n</pattern>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+<!--            <jsonGeneratorDecorator class="net.logstash.logback.decorate.FeatureJsonGeneratorDecorator"/>-->
+            <jsonGeneratorDecorator class="net.logstash.logback.decorate.PrettyPrintingJsonGeneratorDecorator"/>
+            <providers>
+                <pattern>
+                    <pattern>
+                        {
+                            "basicDate": "%date{yyyy-MM-dd'T'HH:mm:ss.SSSZ}",
+                            "basicLevel": "%level",
+                            "basicThread":"%thread",
+                            "basicPid":"${PID}",
+                            "basicApp":"${app}",
+                            "basicEvn":"${evn}",
+
+                            "mdcLogId":"%X{mdcLogId:-1}",
+                            "mdcSn":"%X{mdcSn:-1}",
+                            "mdcType":"%X{mdcType:-SYSTEM}",
+                            "mdcGrade":"%X{mdcGrade:-requestDefault}",
+
+                            "metArgs":"%X{metArgs:-null}",
+                            "metExec":"%X{metExec:-1}",
+                            "metSign":"%X{metSign:-null}",
+                            "metRet":"%X{metRet:-null}",
+                            "metThrow":"%X{metThrow:-null}",
+
+                            "reqUrl":"%X{reqUrl:-null}",
+                            "reqParams":"%X{reqParams:-null}",
+                            "reqHeader":"%X{reqHeaders:-null}",
+                            "reqStatus":"%X{reqStatus:-1}",
+
+                            "msg": "%msg"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
         </encoder>
     </appender>
 
-
-    <!--按天生成日志-->
-<!--    <appender name="logFile" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
-<!--        <Prudent>true</Prudent>-->
-<!--        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
-<!--            <FileNamePattern>${logPath}/newBuilder-%d{yyyy-MM-dd}.log</FileNamePattern>-->
-<!--            <maxHistory>2</maxHistory>-->
-<!--        </rollingPolicy>-->
-<!--        <layout class="ch.qos.logback.classic.PatternLayout">-->
-<!--            <pattern>{-->
-<!--                date:%date,-->
-<!--                level:%-5level,-->
-<!--                thread:%thread-->
-<!--                %mdc{appName},-->
-<!--                %mdc{appEvn},-->
-<!--                %mdc{access_id},-->
-<!--                %msg}-->
-<!--                %n</pattern>-->
-<!--        </layout>-->
-<!--    </appender>-->
-
-<!--    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">-->
-<!--        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
-<!--            <level>INFO</level>-->
-<!--        </filter>-->
-<!--        <destination>${logstash.host}:${logstash.port}</destination>-->
-<!--        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">-->
-<!--            <customFields>{"tags":["common-base-logback"]}</customFields>-->
+    <!--    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">-->
+<!--        <encoder>-->
+<!--            <pattern>-->
+<!--                {-->
+<!--                    "date": "%date{yyyy-MM-dd'T'HH:mm:ss.SSSZ}",-->
+<!--                    "level":"%level",-->
+<!--                    "thread":"%thread",-->
+<!--                    "appName":"${appName}",-->
+<!--                    "appEvn":"${appEvn}",-->
+<!--                    "logId":"%mdc{logId}",-->
+<!--                    "msg":%msg-->
+<!--                }-->
+<!--            </pattern>-->
 <!--        </encoder>-->
 <!--    </appender>-->
 
     <root level="INFO">
         <appender-ref ref="console"/>
-<!--        <appender-ref ref="logFile"/>-->
-<!--        <appender-ref ref="LOGSTASH"/>-->
     </root>
 
 </configuration>

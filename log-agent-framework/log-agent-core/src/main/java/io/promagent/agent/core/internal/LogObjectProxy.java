@@ -27,7 +27,7 @@ public class LogObjectProxy {
         HttpContext.clean();
     }
 
-    public static void addRequest(Map<String, Object> map) {
+    public static void addRequest(Map<String, String> map) {
         HttpContext.get().getRequest().putAll(map);
     }
 

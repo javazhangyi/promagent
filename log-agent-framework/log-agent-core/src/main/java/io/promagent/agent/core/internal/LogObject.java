@@ -8,9 +8,11 @@ import io.promagent.agent.core.config.LogConfig;
 import io.promagent.agent.core.config.LogConstants;
 import io.promagent.agent.core.config.TypeConstants;
 import io.promagent.agent.core.utils.LogObjectUtils;
+import io.promagent.agent.core.utils.MdcUtils;
 import io.promagent.agent.core.utils.StringUtils;
 import io.promagent.agent.core.utils.ThrowableUtils;
 import lombok.Getter;
+import org.slf4j.MDC;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,8 +23,8 @@ public class LogObject {
     private String type;
     private String grade;
     @Getter
-    private Map<String, Object> request = new ConcurrentHashMap<>();
-    private Map<String, Object> method = new ConcurrentHashMap<>();
+    private Map<String, String> request = new ConcurrentHashMap<>();
+    private Map<String, String> method = new ConcurrentHashMap<>();
 
     @Getter
     private JSONObject tempData = new JSONObject();
@@ -34,38 +36,38 @@ public class LogObject {
         this.grade = StringUtils.isEmpty(grade) ? GradeConstants.DEFAULT : grade;
 
         if (StringUtils.isEmpty(exec)) {
-            method.remove(LogConstants.met_exec);
+            method.remove(LogConstants.metExec);
         } else {
-            method.put(LogConstants.met_exec, exec);
+            method.put(LogConstants.metExec, String.valueOf(exec));
         }
         if (StringUtils.isEmpty(sign)) {
-            method.remove(LogConstants.met_sign);
+            method.remove(LogConstants.metSign);
         } else {
-            method.put(LogConstants.met_sign, sign);
+            method.put(LogConstants.metSign, sign);
         }
         if (StringUtils.isEmpty(args) || args.length == 0) {
-            method.remove(LogConstants.met_args);
+            method.remove(LogConstants.metArgs);
         } else {
-            method.put(LogConstants.met_args, LogObjectUtils.getArgs(args));
+            method.put(LogConstants.metArgs, LogObjectUtils.getArgs(args));
         }
         if (StringUtils.isEmpty(ret)) {
-            method.remove(LogConstants.met_ret);
+            method.remove(LogConstants.metRet);
         } else {
             String metRet = LogConfig.skipRetSignatures.contains(sign) ? LogConstants.skip : LogObjectUtils.getReturn(ret);
-            method.put(LogConstants.met_ret, metRet);
+            method.put(LogConstants.metRet, metRet);
         }
 
         if (StringUtils.isEmpty(error)) {
-            method.remove(LogConstants.met_thrown);
+            method.remove(LogConstants.metThrown);
         } else {
             // 避免对同一个异常多次打印
             if (StringUtils.isEmpty(beforeError) || !error.getMessage().contains(beforeError)) {
                 this.grade = GradeConstants.EXCEPTION;
-                method.put(LogConstants.met_thrown, ThrowableUtils.getStackTrace(error));
+                method.put(LogConstants.metThrown, ThrowableUtils.getStackTrace(error));
                 beforeError = error.getMessage();
                 tempData.put(LogConstants.LogPrinted, true);
             } else {
-                method.put(LogConstants.met_thrown, LogConstants.LogPrinted);
+                method.put(LogConstants.metThrown, LogConstants.LogPrinted);
                 tempData.remove(LogConstants.LogPrinted);
             }
         }
@@ -73,19 +75,20 @@ public class LogObject {
     }
 
     protected String getLogJson() {
-        return new JSONObject()
-                .fluentPut(LogConstants.basic, new JSONObject()
-                        .fluentPut(LogConstants.basic_sn, ++sn)
-                        .fluentPut(LogConstants.basic_ip, LogConfig.IP)
-                        .fluentPut(LogConstants.basic_grade, grade))
-                        .fluentPut(LogConstants.basic_type, type)
-//                .fluentPut(LogConstants.mdc, new JSONObject()
-//                        .fluentPut(LogConstants.mdc_appEvn, LogConfig.appEvn)
-//                        .fluentPut(LogConstants.mdc_appName, LogConfig.appName)
-//                        .fluentPut(LogConstants.mdc_type, type)
-//                        .fluentPut(LogConstants.mdc_logId, MdcUtils.getLogId()))
-                .fluentPut(LogConstants.request, request)
-                .fluentPut(LogConstants.method, method)
-                .toString();
+        MDC.put(LogConstants.mdcSn, String.valueOf(++sn));
+        MDC.put(LogConstants.mdcGrade, grade);
+        MDC.put(LogConstants.mdcType, type);
+        MDC.put(LogConstants.mdcLogId, MdcUtils.getLogId());
+
+        MDC.put(LogConstants.metArgs, method.get(LogConstants.metArgs));
+        MDC.put(LogConstants.metRet, method.get(LogConstants.metRet));
+        MDC.put(LogConstants.metExec, method.get(LogConstants.metExec));
+        MDC.put(LogConstants.metThrown, method.get(LogConstants.metThrown));
+
+        MDC.put(LogConstants.reqUrl, request.get(LogConstants.reqUrl));
+        MDC.put(LogConstants.reqHeaders, request.get(LogConstants.reqHeaders));
+        MDC.put(LogConstants.reqParams, request.get(LogConstants.reqParams));
+        MDC.put(LogConstants.reqStatus, request.get(LogConstants.reqStatus));
+        return "agentJsonLog";
     }
 }

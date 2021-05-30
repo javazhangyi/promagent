@@ -42,7 +42,7 @@ public class AgentConfig {
     public static class Agent {
 
         private String appName = "appName";
-        private String appEvn = "prod";
+//        private String appEvn = "prod";
 
         private boolean debug = false;
         private int retMaxLength = 20480;

@@ -2,28 +2,30 @@ package io.promagent.agent.core.config;
 
 public interface LogConstants {
 
-    String request = "request";
-    String reg_url = "url";
-    String reg_header = "header";
-    String reg_params = "params";
-    String reg_status = "status";
+//    String request = "request";
+    String reqUrl = "reqUrl";
+    String reqHeaders = "reqHeaders";
+    String reqParams = "reqParams";
+    String reqStatus = "reqStatus";
+//    String method = "method";
+    String metArgs = "metArgs";
+    String metRet = "metRet";
+    String metSign = "metSign";
+    String metExec = "metExec";
+    String metThrown = "metThrown";
 
-    String method = "method";
-    String met_args = "args";
-    String met_ret = "ret";
-    String met_sign = "sign";
-    String met_exec = "exec";
-    String met_thrown = "thrown";
+//    String basic = "basic";
+    String mdcSn = "mdcSn";
+    String mdcGrade = "mdcGrade";
+    String mdcType = "mdcType";
 
-    String basic = "basic";
-    String basic_sn = "sn";
-    String basic_ip = "ip";
-    String basic_grade = "grade";
-    String basic_type = "type";
-
+//    basic_app
+//    basic_evn
+//    basic_logId
+//    basic_date
 
 //    String mdc = "mdc";
-    String mdc_logId = System.getProperty("agent.mdcLogId");
+    String mdcLogId = System.getProperty("agent.mdcLogId");
 //    String mdc_appName = "appName";
 //    String mdc_appEvn = "appEvn";
 //    String mdc_type = "type";

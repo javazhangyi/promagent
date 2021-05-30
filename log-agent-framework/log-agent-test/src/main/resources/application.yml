@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: logAgentTest
+  profiles:
+    active: dev
